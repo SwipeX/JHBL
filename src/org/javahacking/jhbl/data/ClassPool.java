@@ -8,6 +8,7 @@ import java.util.HashMap;
  * Acts as a tool to access {@link org.objectweb.asm.tree.ClassNode}s.
  *
  * @author trDna
+ * @author Swipe
  */
 public class ClassPool{
 
