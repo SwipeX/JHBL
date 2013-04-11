@@ -2,6 +2,7 @@ package org.javahacking.jhbl.data;
 
 import org.objectweb.asm.tree.ClassNode;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -43,6 +44,15 @@ public class ClassPool{
      */
     public void removeClassNodeAt(String cName){
         loadedClasses.remove(cName);
+    }
+
+    /**
+     * Retrieves the loaded {@link ClassNode} as a {@link Collection}.
+     *
+     * @return The {@link ClassNode}s.
+     */
+    public Collection<ClassNode> getClasses(){
+        return loadedClasses.values();
     }
 
     /**
