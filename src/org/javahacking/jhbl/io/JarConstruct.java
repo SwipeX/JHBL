@@ -1,5 +1,7 @@
 package org.javahacking.jhbl.io;
 
+import org.javahacking.jhbl.data.ClassPool;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
@@ -14,7 +16,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * A representation of a JAR content vector.
+ * Constructs a simplified representation of a JAR file.
  *
  * @author trDna
  * @since 1.7
@@ -29,7 +31,7 @@ public class JarConstruct {
     /**
      * This is where the classes are stored. For use only in the loader package!
      */
-    public HashMap<String, ClassNode> loadedClassNodes = new HashMap<String, ClassNode>();
+    private HashMap<String, ClassNode> loadedClassNodes = new HashMap<>();
 
     /**
      * The JAR's path.
@@ -45,6 +47,11 @@ public class JarConstruct {
      * The JAR's URL path.
      */
     private URL jarUrlPath;
+
+    /**
+     * Acts as a container to store classes.
+     */
+    private ClassPool cPool;
 
 
     /**
@@ -194,6 +201,15 @@ public class JarConstruct {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Retrieves the loaded classes as a {@link ClassPool}
+     *
+     * @return A {@link ClassPool} containing the loaded classes.
+     */
+    public ClassPool getClassPool(){
+        return cPool == null ? (cPool = new ClassPool(loadedClassNodes)) : cPool;
     }
 
 
