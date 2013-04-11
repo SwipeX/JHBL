@@ -33,7 +33,7 @@ public class ClassPool{
      * @param cName The class name.
      * @return The corresponding {@link ClassNode}.
      */
-    public ClassNode getClassNodeAt(String cName){
+    public ClassNode getClassNode(String cName){
         return loadedClasses.get(cName);
     }
 
@@ -42,7 +42,7 @@ public class ClassPool{
      *
      * @param cName The class name.
      */
-    public void removeClassNodeAt(String cName){
+    public void removeClassNode(String cName){
         loadedClasses.remove(cName);
     }
 
@@ -62,6 +62,25 @@ public class ClassPool{
      */
     public ClassNode[] toArray(){
         return loadedClasses.values().toArray(new ClassNode[loadedClasses.size()]);
+    }
+
+
+    @Override
+    public String toString(){
+        String tmp = "[";
+        ClassNode[] cns = toArray();
+
+        for (int i = 0; i < getClasses().size(); ++i){
+
+            if(i == getClasses().size() - 1){
+               tmp += "]";
+
+            }else{
+               tmp += ", " + cns[i].name;
+            }
+
+        }
+       return tmp;
     }
 
 }
