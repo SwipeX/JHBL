@@ -72,15 +72,18 @@ public class ClassPool{
 
         for (int i = 0; i < getClasses().size(); ++i){
 
+            tmp += cns[i].name;
+
             if(i == getClasses().size() - 1){
-               tmp += "]";
+                tmp += "]";
 
             }else{
-               tmp += ", " + cns[i].name;
+                tmp += ", ";
             }
 
+
         }
-       return tmp;
+        return tmp;
     }
 
 }
