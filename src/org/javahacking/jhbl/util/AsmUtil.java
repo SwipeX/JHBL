@@ -2,7 +2,9 @@ package org.javahacking.jhbl.util;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
+
 import org.objectweb.asm.tree.*;
+
 import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 import org.objectweb.asm.tree.analysis.BasicInterpreter;

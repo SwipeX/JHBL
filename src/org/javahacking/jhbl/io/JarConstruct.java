@@ -72,6 +72,8 @@ public class JarConstruct {
             //Referencing the JAR's path.
             this.jarPath = jarPath;
 
+            loadClasses();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -99,6 +101,8 @@ public class JarConstruct {
 
             jarUrlPath = new URL((jarUrl + "!/").replace("http://", "jar:http://"));
 
+            loadClasses();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -109,16 +113,16 @@ public class JarConstruct {
      *
      * @return True if it was successful, False if it was not.
      */
-    public boolean loadClasses(){
+    private boolean loadClasses(){
         short count = 0;
 
         try {
             //Startup
-            p("---------------------------------------------------------------------");
-            p("--------------------      Jar Loader     ----------------------------");
-            p("File: " + jarPath);
+            System.out.println("---------------------------------------------------------------------");
+            System.out.println("--------------------      Jar Loader     ----------------------------");
+            System.out.println("File: " + jarPath);
 
-            p("JC Hash: " + getClass().hashCode());
+            System.out.println("JC Hash: " + getClass().hashCode());
 
 
             JarFile jf;
@@ -146,8 +150,8 @@ public class JarConstruct {
 
 
             //Print out the size of the JarFile
-            p("JarFile Size = " + jf.size());
-            p("-----------------------------------------------------------------");
+            System.out.println("JarFile Size = " + jf.size());
+            System.out.println("-----------------------------------------------------------------");
 
             //Referencing the entries.
             Enumeration<? extends JarEntry> en = jf.entries();
@@ -165,8 +169,8 @@ public class JarConstruct {
                     ++count;
 
                     //Print out the entry
-                    p("Entry " + count + ") " + entry.getName());
-                    p(" -> Decompressed Size = " + entry.getSize() + " Bytes" + "\n");
+                    System.out.println("Entry " + count + ") " + entry.getName());
+                    System.out.println(" -> Decompressed Size = " + entry.getSize() + " Bytes" + "\n");
 
                     //ClassReader retrieves the bytes from a given entry.
                     ClassReader cr = new ClassReader(jf.getInputStream(entry));
@@ -189,8 +193,8 @@ public class JarConstruct {
 
 
             System.out.println(count + " classes were loaded and stored!");
-            p("-----------------------------------------------------------------");
-            p("-----------------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------------");
+            System.out.println("-----------------------------------------------------------------");
 
             System.out.println("Load successful.");
 
@@ -210,11 +214,6 @@ public class JarConstruct {
      */
     public ClassPool getClassPool(){
         return cPool == null ? (cPool = new ClassPool(loadedClassNodes)) : cPool;
-    }
-
-
-    private void p(Object msg){
-        System.out.println(msg);
     }
 
 

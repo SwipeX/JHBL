@@ -36,7 +36,6 @@ import java.util.List;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
 
 /**
  * An abstract converter from visit events to text.
