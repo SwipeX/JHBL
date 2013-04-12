@@ -133,7 +133,7 @@ public class AddGetterAdapter extends ClassVisitor implements Opcodes {
                 //Mark down any generics of the FieldNode (highly unlikely to have any, so it will likely be null).
                 signature = f.signature;
 
-                //Check to see if the field isn't 'static'.
+                //Check to see if the field is 'static'.
                 if((f.access & ACC_STATIC) != 0){
                     //Toggle the isStatic boolean so that we are aware that the field is static. They must be handled differently in bytecode.
                     isStatic = true;
