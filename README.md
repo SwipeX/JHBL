@@ -1,7 +1,7 @@
-JHBL
+JavaHacking Bytecode Library (JHBL)
 ====
 
-JavaHacking Bytecode Library - Powered by OW2's ASM - An all purpose Java bytecode manipulation and analysis framework <http://asm.ow2.org/>.
+Powered by OW2's ASM - An all purpose Java bytecode manipulation and analysis framework <http://asm.ow2.org/>.
 
 Contribute to this public bytecode library extension of ASM.
 
@@ -15,4 +15,5 @@ Planned Features
 
 Let's make this something to hype about together!
 
-- Swipe and trDna
+Swipe and trDna
+Project Managers
