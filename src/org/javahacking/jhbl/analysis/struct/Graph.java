@@ -1,4 +1,4 @@
-package org.javahacking.jhbl.analysis;
+package org.javahacking.jhbl.analysis.struct;
 
 /**
  * @author trDna

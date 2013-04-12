@@ -1,5 +1,6 @@
 package org.javahacking.jhbl.analysis;
 
+import org.javahacking.jhbl.analysis.struct.GraphNode;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -33,9 +34,6 @@ public class ControlFlowAnalyzer<V extends Value> extends Analyzer {
     protected void newControlFlowEdge(int insn, int succ) {
         AbstractInsnNode from = mn.instructions.get(insn);
         AbstractInsnNode to = mn.instructions.get(succ);
-
-
-        ClassWriter c;
 
         GraphNode<BasicValue> s = (GraphNode<BasicValue>) getFrames()[insn];
         s.successors.add((GraphNode<BasicValue>) getFrames()[succ]);
