@@ -1,4 +1,4 @@
-package org.javahacking.jhbl.analysis;
+package org.javahacking.jhbl.analysis.struct;
 
 import org.objectweb.asm.tree.analysis.Frame;
 import org.objectweb.asm.tree.analysis.Value;
@@ -13,7 +13,7 @@ import java.util.LinkedList;
  */
 public class GraphNode<V extends Value> extends Frame<V> {
 
-    protected LinkedList<GraphNode<V>> successors = new LinkedList<>();
+    public LinkedList<GraphNode<V>> successors = new LinkedList<>();
 
     /**
      * Represents a Node for use of a Graph.

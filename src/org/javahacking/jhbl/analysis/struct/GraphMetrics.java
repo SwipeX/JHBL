@@ -1,5 +1,6 @@
-package org.javahacking.jhbl.analysis;
+package org.javahacking.jhbl.analysis.struct;
 
+import org.javahacking.jhbl.analysis.ControlFlowAnalyzer;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.analysis.*;
 
