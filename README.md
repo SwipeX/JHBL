@@ -1,4 +1,4 @@
-JavaHacking Bytecode Library (JHBL)
+JavaHacking Bytecode Library (JHBL) <http://www.javahacking.org/>
 ====
 
 Powered by OW2's ASM - An all purpose Java bytecode manipulation and analysis framework <http://asm.ow2.org/>.
@@ -15,5 +15,4 @@ Planned Features
 
 Let's make this something to hype about together!
 
-Swipe and trDna
-Project Managers
+Swipe and trDna - Project Managers
