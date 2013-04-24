@@ -1,5 +1,6 @@
 package org.javahacking.jhbl.io;
 
+import org.javahacking.jhbl.data.ClassPool;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.File;
@@ -16,12 +17,12 @@ import java.util.jar.JarOutputStream;
  */
 public class JarWriter {
 
-    public JarWriter(String location, HashMap<String, ClassNode> clazzez) {
+    public JarWriter(String location, ClassPool cp) {
         try {
             File file = new File(location);
             FileOutputStream stream = new FileOutputStream(file);
             JarOutputStream out = new JarOutputStream(stream);
-            for (ClassNode classNode : clazzez.values()) {
+            for (ClassNode classNode : cp.getClasses()) {
                 JarEntry je = new JarEntry(classNode.name.replace('.', '/') + ".class");
                 out.putNextEntry(je);
                 out.write(classNode.getBytes(false));
