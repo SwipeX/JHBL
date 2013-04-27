@@ -1,20 +1,18 @@
 package org.javahacking.jhbl.modifiers;
 
-import org.javahacking.jhbl.analysis.Optimizer;
+import org.javahacking.jhbl.analysis.Analyzer;
 import org.javahacking.jhbl.data.ClassPool;
-import org.javahacking.jhbl.io.JarConstruct;
+import org.javahacking.jhbl.io.JarReference;
 
 import org.objectweb.asm.tree.*;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * What do you think this does?
  *
  * TODO:
  * - The Core of the Deobfuscator
- *   [x] The
  * - The field and class remapper
  *
  * @author trDna
@@ -31,17 +29,13 @@ public class Deobfuscator {
      */
     private ClassPool injCp;
 
-    /**
-     * {@link ClassTransformer}s. It may have a use later.
-     */
-    private LinkedList<ClassTransformer> transforms = new LinkedList<>();
 
     /**
      * Constructs a {@link Deobfuscator}. It does what it's supposed to do.
      *
-     * @param jc The {@link JarConstruct} to work with.
+     * @param jc The {@link org.javahacking.jhbl.io.JarReference} to work with.
      */
-    public Deobfuscator(JarConstruct jc){
+    public Deobfuscator(JarReference jc){
         this.cp = jc.getClassPool();
     }
 
@@ -60,12 +54,11 @@ public class Deobfuscator {
     public void runAll(){
         runRenamer();
 
-        //Dump stuff
         HashMap<String, ClassNode> injClasses = new HashMap<>();
 
         for(ClassNode cn : cp.getClasses()){
             for(MethodNode mn : cn.methods){
-                new Optimizer(mn);
+                Analyzer.analyze(mn);
             }
             injClasses.put(cn.name, cn);
         }
@@ -86,7 +79,7 @@ public class Deobfuscator {
      * Used to give fields and classes better names.
      */
     public void runRenamer(){
-        Refactorer.renameFields(cp);
+        Remapper.renameFields(cp);
     }
 
 }

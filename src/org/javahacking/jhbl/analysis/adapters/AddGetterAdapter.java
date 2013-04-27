@@ -1,4 +1,4 @@
-package org.javahacking.jhbl.modifiers;
+package org.javahacking.jhbl.analysis.adapters;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;

@@ -6,25 +6,30 @@ import org.objectweb.asm.tree.*;
 import java.util.ListIterator;
 
 /**
- * What do you think this does?
+ * A Remapper.
  *
  * @author trDna
  */
-public class Refactorer {
+public class Remapper {
 
+    /**
+     * Renames all {@link FieldNode}s per every {@link ClassNode} in the {@link ClassPool}.
+     *
+     * @param cp The {@link ClassPool}
+     */
     protected static void renameFields(ClassPool cp){
         int fieldNum = 0;
         int arrayNum = 0;
 
         for(ClassNode cn : cp.getClasses()){
 
-            //Rename field declarations
+            /* Rename field declarations */
             for(FieldNode fn : cn.fields){
 
                 String realFName = fn.name;
                 String deobName = "";
 
-                //Prepend the base of the FieldName
+                /* Prepend the base of the FieldName */
                 if(!fn.desc.contains(";")){
                     if (fn.desc.contains("I"))
                         deobName += "anInt";
@@ -41,6 +46,7 @@ public class Refactorer {
                     else if (fn.desc.contains("D"))
                         deobName += "aDouble";
                 } else {
+
                     deobName += ((fn.desc.startsWith("a") || fn.desc.startsWith("e") || fn.desc.startsWith("i") || fn.desc.startsWith("o") || fn.desc.startsWith("u")) ? "an" : "a");
                     deobName += fn.desc.replace("L", "").replace(";", "").replace("[", "");
 
@@ -54,16 +60,21 @@ public class Refactorer {
                 }
 
                 //Rename instance or class fields within methods
+                ListIterator<AbstractInsnNode> listIterator;
+
                 for(MethodNode mn : cn.methods){
-                    ListIterator<AbstractInsnNode> listIterator = mn.instructions.iterator();
+                    listIterator = mn.instructions.iterator();
+
                     while(listIterator.hasNext()){
                         AbstractInsnNode ain = listIterator.next();
+
                         if(ain instanceof FieldInsnNode){
                             FieldInsnNode fin = (FieldInsnNode) ain;
+
                             if(fin.name.equals(realFName)){
                                 fin.name = deobName;
-                                System.out.println(realFName + " renamed to " + fin.name);
                             }
+
                         }
                     }
                 }
@@ -71,6 +82,7 @@ public class Refactorer {
                 fn.name = deobName;
 
             }
+            /* Reset Counters */
             fieldNum = 0;
             arrayNum = 0;
         }

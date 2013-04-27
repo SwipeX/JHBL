@@ -6,10 +6,12 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
+
 import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.jar.JarEntry;
@@ -21,7 +23,7 @@ import java.util.jar.JarFile;
  * @author trDna
  * @since 1.7
  */
-public class JarConstruct {
+public class JarReference {
 
     /**
      * The URLClassLoader that loads the JAR from a given path.
@@ -59,13 +61,8 @@ public class JarConstruct {
      *
      * @param jarPath The path to the JAR.
      */
-    public JarConstruct(final String jarPath){
+    public JarReference(final String jarPath){
         try {
-
-            //Set up logger and print out the path.
-            System.out.println("JarConstruct " + getClass().hashCode());
-            System.out.println("Path to JAR: " + jarPath);
-
             //Creates a new URLClassLoader and loads the JAR.
             jarUrlPath = new URL("file:" + jarPath);
 
@@ -86,12 +83,8 @@ public class JarConstruct {
      * @param flags For future use
      *
      */
-    public JarConstruct(final String jarUrl, int flags){
+    public JarReference(final String jarUrl, int flags){
         try {
-
-            //Set up logger and print out the path.
-            System.out.println("JarConstruct " + getClass().hashCode());
-            System.out.println("Path to JAR: " + (jarUrl + "!").replace("http://", "file:"));
 
             //Creates a new URLClassLoader and loads the JAR.
             url = new URLClassLoader(new URL[]{new URL((jarUrl + "!/").replace("http://", "jar:http://"))});
@@ -117,20 +110,10 @@ public class JarConstruct {
         short count = 0;
 
         try {
-            //Startup
-            System.out.println("---------------------------------------------------------------------");
-            System.out.println("--------------------      Jar Loader     ----------------------------");
-            System.out.println("File: " + jarPath);
-
-            System.out.println("JC Hash: " + getClass().hashCode());
-
-
             JarFile jf;
 
             //Referencing the JAR file.
             if(jarUrl != null) {
-
-                System.out.println(jarUrlPath.toString());
 
                 //Connect to the JAR directly online
                 JarURLConnection u = (JarURLConnection) jarUrlPath.openConnection();
@@ -144,14 +127,6 @@ public class JarConstruct {
                 jf = new JarFile(jarPath);
 
             }
-
-            //Make sure that a non-null value was passed in from either constructor
-            assert jarPath != null || jarUrl != null : "Jar loader failure!";
-
-
-            //Print out the size of the JarFile
-            System.out.println("JarFile Size = " + jf.size());
-            System.out.println("-----------------------------------------------------------------");
 
             //Referencing the entries.
             Enumeration<? extends JarEntry> en = jf.entries();
@@ -168,10 +143,6 @@ public class JarConstruct {
                     //Count out the entries
                     ++count;
 
-                    //Print out the entry
-                    System.out.println("Entry " + count + ") " + entry.getName());
-                    System.out.println(" -> Decompressed Size = " + entry.getSize() + " Bytes" + "\n");
-
                     //ClassReader retrieves the bytes from a given entry.
                     ClassReader cr = new ClassReader(jf.getInputStream(entry));
 
@@ -182,23 +153,10 @@ public class JarConstruct {
                     //Think of it as data from 'cr' are being entrusted or put into 'cn' (such as the class bytes).
                     cr.accept(cn, 0);
 
-                    System.out.println("");
-
                     //Put it into the local package's HashMap as a ClassNode.
                     loadedClassNodes.put(cn.name, cn);
                 }
             }
-
-
-
-
-            System.out.println(count + " classes were loaded and stored!");
-            System.out.println("-----------------------------------------------------------------");
-            System.out.println("-----------------------------------------------------------------");
-
-            System.out.println("Load successful.");
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
