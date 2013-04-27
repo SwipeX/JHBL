@@ -58,7 +58,8 @@ public class Deobfuscator {
 
         for(ClassNode cn : cp.getClasses()){
             for(MethodNode mn : cn.methods){
-                Analyzer.analyze(mn);
+                //TODO: Analysis
+                Analyzer.printOpcodes(cn.name,  mn);
             }
             injClasses.put(cn.name, cn);
         }

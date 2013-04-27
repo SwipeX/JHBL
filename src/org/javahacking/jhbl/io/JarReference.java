@@ -56,6 +56,7 @@ public class JarReference {
     private ClassPool cPool;
 
 
+
     /**
      * Creates a representation of a loaded jar.
      *
