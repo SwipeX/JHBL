@@ -1,8 +1,7 @@
 package org.javahacking.jhbl.analysis;
 
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.ListIterator;
 
@@ -64,8 +63,29 @@ public class Analyzer implements Opcodes {
 
             opcode = ain.getOpcode();
 
-            if(opcode >= 0 && opcode < OPCODES.length)
-                output += (OPCODES[opcode]) + LINE_SEPARATOR;
+            if(opcode >= 0 && opcode < OPCODES.length)   {
+
+                if(ain instanceof LabelNode){
+                    LabelNode ln = (LabelNode) ain;
+                    output += "Label (+" +  ln.getLabel().getOffset() + ")";
+
+                }else if (ain instanceof JumpInsnNode){
+                    JumpInsnNode jin = (JumpInsnNode)ain;
+                    output += (OPCODES[opcode]) + "(+" + mv.instructions.indexOf(jin.label) + ")" + LINE_SEPARATOR;
+
+                 //Bugged? ALOAD_17.....
+                }else if (ain instanceof VarInsnNode){
+                    VarInsnNode vin = (VarInsnNode)ain;
+                    output += (OPCODES[opcode]) + "_" + vin.var + LINE_SEPARATOR;
+
+                }else if (ain instanceof FieldInsnNode){
+                    FieldInsnNode fin = (FieldInsnNode)ain;
+                    output += (OPCODES[opcode]) + "[" + fin.owner + "." + fin.name + " of type " + fin.desc +  "]" + LINE_SEPARATOR;
+
+                }else{
+                    output += (OPCODES[opcode]) + LINE_SEPARATOR;
+                }
+            }
 
         }
 

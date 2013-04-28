@@ -57,11 +57,11 @@ public class Deobfuscator {
         HashMap<String, ClassNode> injClasses = new HashMap<>();
 
         for(ClassNode cn : cp.getClasses()){
-            for(MethodNode mn : cn.methods){
-                //TODO: Analysis
-                Analyzer.printOpcodes(cn.name,  mn);
-            }
+             //TODO: Analysis
+                Analyzer.printOpcodes(cn.name,  cn.methods.get(1));
+
             injClasses.put(cn.name, cn);
+            break;
         }
 
         this.injCp = new ClassPool(injClasses);
