@@ -50,6 +50,12 @@ public class Analyzer implements Opcodes {
     }
 
 
+    /**
+     * Prints the opcodes passed in.
+     *
+     * @param owner The class name.
+     * @param mv The {@link MethodNode} to be analyzed.
+     */
     public static void printOpcodes(String owner, MethodNode mv) {
         ListIterator<AbstractInsnNode> iterator = mv.instructions.iterator();
 
@@ -81,6 +87,55 @@ public class Analyzer implements Opcodes {
                 }else if (ain instanceof FieldInsnNode){
                     FieldInsnNode fin = (FieldInsnNode)ain;
                     output += (OPCODES[opcode]) + "[" + fin.owner + "." + fin.name + " of type " + fin.desc +  "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof IntInsnNode){
+                    IntInsnNode in = (IntInsnNode)ain;
+                    output += (OPCODES[opcode]) + "[" + in.operand  + "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof IincInsnNode){
+                    IincInsnNode in = (IincInsnNode)ain;
+                    output += (OPCODES[opcode]) + "[Increment of " + in.incr + " at Var " + in.var  + "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof LdcInsnNode){
+                    LdcInsnNode ldc = (LdcInsnNode)ain;
+                    output += (OPCODES[opcode]) + "[" + ldc.cst + "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof MethodInsnNode){
+                    MethodInsnNode min = (MethodInsnNode)ain;
+                    output += (OPCODES[opcode]) + "[" + min.owner + "." + min.name + min.desc + "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof InvokeDynamicInsnNode){
+                    InvokeDynamicInsnNode id = (InvokeDynamicInsnNode)ain;
+                    output += (OPCODES[opcode]) + "[" + id.name + " <" + id.desc + ">" + "<" + id.bsm.toString() + ">" +  "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof TableSwitchInsnNode){
+                    TableSwitchInsnNode ts = (TableSwitchInsnNode)ain;
+                    output += "[" + OPCODES[opcode];
+
+                    for(LabelNode ln : ts.labels){
+                      output += "(HBOffset: + " + mv.instructions.indexOf(ln) + ")";
+                    }
+
+                    output += "(DFLT-HBOffset: " + mv.instructions.indexOf(ts.dflt) + ")";
+                    output += "(Max: " + ts.max + ", Min: " + ts.min + ")";
+
+                    output += "]" + LINE_SEPARATOR;
+
+                }else if (ain instanceof LookupSwitchInsnNode){
+                    LookupSwitchInsnNode ls = (LookupSwitchInsnNode)ain;
+                    output += "[" + OPCODES[opcode];
+
+                    for(int key : ls.keys){
+                      output += "(Key: " + key + ")";
+                    }
+
+                    for(LabelNode ln : ls.labels){
+                        output += "(HBOffset: + " + mv.instructions.indexOf(ln) + ")";
+                    }
+
+                    output += "(DFLT-HBOffset: " + mv.instructions.indexOf(ls.dflt) + ")";
+
+                    output +=  "]" + LINE_SEPARATOR;
 
                 }else{
                     output += (OPCODES[opcode]) + LINE_SEPARATOR;
