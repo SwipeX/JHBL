@@ -2,6 +2,9 @@ package org.javahacking.jhbl.analysis;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+import org.objectweb.asm.tree.analysis.BasicInterpreter;
+import org.objectweb.asm.tree.analysis.Frame;
 
 import java.util.ListIterator;
 
@@ -49,6 +52,82 @@ public class Analyzer implements Opcodes {
         LINE_SEPARATOR = System.lineSeparator();
     }
 
+    /**
+     * Replaces a jump to a GOTO label instruction with a jump to a label.
+     * It also replaces a GOTO to a RETURN instruction with a simple RETURN instruction (because it's redundant).
+     * More to come.
+     *
+     * @param mn The {@link MethodNode} to be optimized.
+     * @see Opcodes
+     */
+    public static void optimizeJumps(MethodNode mn){
+        ListIterator<AbstractInsnNode> iterator = mn.instructions.iterator();
+
+        while (iterator.hasNext()){
+            AbstractInsnNode ain = iterator.next();
+
+            if(ain instanceof JumpInsnNode){
+                LabelNode lbl = ((JumpInsnNode) ain).label;
+                AbstractInsnNode tgt;
+
+                while (true){
+                    tgt = lbl;
+                    while (tgt != null && tgt.getOpcode() < 0){
+                        tgt = tgt.getNext();
+                    }
+                    if(tgt != null && tgt.getOpcode() == GOTO){
+                        System.err.println("Optimizing jump insns..");
+                        lbl = ((JumpInsnNode)tgt).label;
+                    }else{
+                        break;
+                    }
+                }
+
+                ((JumpInsnNode) ain).label = lbl;
+
+                if(ain.getOpcode() == GOTO && tgt != null){
+                    int opcode = tgt.getOpcode();
+
+                    if((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW){
+                        System.out.println("Optimizing jump instructions..");
+                        mn.instructions.set(ain, tgt.clone(null));
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+
+    /**
+     * Removes any unnecessary code.
+     *
+     * @param cn The {@link ClassNode} to work with.
+     */
+    public static void removeDeadCode(ClassNode cn){
+        org.objectweb.asm.tree.analysis.Analyzer asmAnalyzer = new org.objectweb.asm.tree.analysis.Analyzer(new BasicInterpreter());
+
+        for(MethodNode mn : cn.methods){
+            try{
+                asmAnalyzer.analyze(cn.name, mn);
+
+                Frame[] analyzerFrames = asmAnalyzer.getFrames();
+                AbstractInsnNode[] ains = mn.instructions.toArray();
+
+                for(int i = 0; i < analyzerFrames.length; i++) {
+                    if(analyzerFrames[i] == null && !(ains[i] instanceof LabelNode)) {
+                        mn.instructions.remove(ains[i]);
+                        System.out.println("Removing dead code..");
+                    }
+                }
+
+            }catch (AnalyzerException e){
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Prints the opcodes passed in.
@@ -79,7 +158,7 @@ public class Analyzer implements Opcodes {
                     JumpInsnNode jin = (JumpInsnNode)ain;
                     output += (OPCODES[opcode]) + "(+" + mv.instructions.indexOf(jin.label) + ")" + LINE_SEPARATOR;
 
-                 //Bugged? ALOAD_17.....
+                    //Bugged? ALOAD_17.....
                 }else if (ain instanceof VarInsnNode){
                     VarInsnNode vin = (VarInsnNode)ain;
                     output += (OPCODES[opcode]) + "_" + vin.var + LINE_SEPARATOR;
@@ -113,7 +192,7 @@ public class Analyzer implements Opcodes {
                     output += "[" + OPCODES[opcode];
 
                     for(LabelNode ln : ts.labels){
-                      output += "(HBOffset: + " + mv.instructions.indexOf(ln) + ")";
+                        output += "(HBOffset: + " + mv.instructions.indexOf(ln) + ")";
                     }
 
                     output += "(DFLT-HBOffset: " + mv.instructions.indexOf(ts.dflt) + ")";
@@ -126,7 +205,7 @@ public class Analyzer implements Opcodes {
                     output += "[" + OPCODES[opcode];
 
                     for(int key : ls.keys){
-                      output += "(Key: " + key + ")";
+                        output += "(Key: " + key + ")";
                     }
 
                     for(LabelNode ln : ls.labels){
