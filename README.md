@@ -13,6 +13,4 @@ Planned Features
 - Easy to use injector [in progress as of April 11, 2013]
 - Hook processor
 
-Let's make this something to hype about together!
-
-Swipe and trDna - Project Managers
+Discontinued - Feel free to use.
